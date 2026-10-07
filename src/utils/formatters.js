@@ -1,20 +1,28 @@
-export function formatCurrency(amount, currency = "$") {
+export function formatCurrency(amount, currency = "GH₵") {
   const num = Number(amount) || 0;
-  return `${currency}${num.toLocaleString("en-US", {
+  const isNegative = num < 0;
+  const absFormatted = Math.abs(num).toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  })}`;
+  });
+  const space = currency.length > 1 ? " " : "";
+  return `${isNegative ? "-" : ""}${currency}${space}${absFormatted}`;
 }
 
-export function formatCompactCurrency(amount, currency = "$") {
+export function formatCompactCurrency(amount, currency = "GH₵") {
   const num = Number(amount) || 0;
-  if (Math.abs(num) >= 1000000) {
-    return `${currency}${(num / 1000000).toFixed(1)}M`;
+  const isNegative = num < 0;
+  const abs = Math.abs(num);
+  const space = currency.length > 1 ? " " : "";
+  let valStr;
+  if (abs >= 1000000) {
+    valStr = `${(abs / 1000000).toFixed(1)}M`;
+  } else if (abs >= 1000) {
+    valStr = `${(abs / 1000).toFixed(1)}k`;
+  } else {
+    valStr = abs.toFixed(0);
   }
-  if (Math.abs(num) >= 1000) {
-    return `${currency}${(num / 1000).toFixed(1)}k`;
-  }
-  return `${currency}${num.toFixed(0)}`;
+  return `${isNegative ? "-" : ""}${currency}${space}${valStr}`;
 }
 
 export function formatPercent(val) {

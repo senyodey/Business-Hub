@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, ArrowUpRight, ArrowDownRight, DollarSign, Calendar, Tag, FileText } from "lucide-react";
+import { X, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { formatCurrency } from "../utils/formatters";
 
 export default function TransactionModal({
@@ -10,7 +10,7 @@ export default function TransactionModal({
   apps = [],
   initialType = "income",
   editItem = null,
-  currency = "$",
+  currency = "GH₵",
 }) {
   const [formData, setFormData] = useState({
     type: "income",
@@ -116,38 +116,38 @@ export default function TransactionModal({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in">
+      <div className="bg-slate-900/95 backdrop-blur-2xl border border-white/[0.1] rounded-3xl w-full max-w-lg shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-800 bg-slate-950/50">
+        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-white/[0.08] bg-slate-950/40 shrink-0">
           <div>
-            <h2 className="text-base font-bold text-white tracking-tight">
-              {editItem ? "Edit Transaction Entry" : "Record Financial Entry"}
+            <h2 className="text-sm sm:text-base font-extrabold text-white tracking-tight">
+              {editItem ? "Edit Financial Entry" : "Record Financial Entry"}
             </h2>
-            <p className="text-xs text-slate-400">
-              Autocomputes your profit and loss standing in real time
+            <p className="text-xs text-slate-400 mt-0.5">
+              Updates your profit and loss standing in real time
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
+            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-white/[0.05] transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-5 space-y-4 text-xs overflow-y-auto flex-1">
           
           {/* Income vs Expense Selector */}
-          <div className="grid grid-cols-2 gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
+          <div className="grid grid-cols-2 gap-2 bg-slate-950/80 p-1 rounded-2xl border border-white/[0.06]">
             <button
               type="button"
               onClick={() => handleTypeChange("income")}
-              className={`flex items-center justify-center space-x-1.5 py-2 rounded-lg font-bold transition ${
+              className={`flex items-center justify-center space-x-1.5 py-2.5 rounded-xl font-bold transition-all duration-200 ${
                 isIncome
-                  ? "bg-emerald-600 text-white shadow-sm"
+                  ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-600/25"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -158,9 +158,9 @@ export default function TransactionModal({
             <button
               type="button"
               onClick={() => handleTypeChange("expense")}
-              className={`flex items-center justify-center space-x-1.5 py-2 rounded-lg font-bold transition ${
+              className={`flex items-center justify-center space-x-1.5 py-2.5 rounded-xl font-bold transition-all duration-200 ${
                 !isIncome
-                  ? "bg-rose-600 text-white shadow-sm"
+                  ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-lg shadow-rose-600/25"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -173,10 +173,10 @@ export default function TransactionModal({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-slate-300 font-semibold mb-1">
-                Amount ({currency})
+                Amount ({currency}) *
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-2.5 text-slate-400 font-bold">{currency}</span>
+                <span className="absolute left-3 top-2.5 text-slate-400 font-bold font-mono">{currency}</span>
                 <input
                   type="number"
                   step="0.01"
@@ -184,21 +184,21 @@ export default function TransactionModal({
                   placeholder="0.00"
                   value={formData.amount}
                   onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-7 pr-3 py-2 text-white font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl pl-10 pr-3 py-2 text-white font-semibold font-mono focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
             </div>
 
             <div>
               <label className="block text-slate-300 font-semibold mb-1">
-                Transaction Date
+                Transaction Date *
               </label>
               <input
                 type="date"
                 required
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
           </div>
@@ -213,9 +213,9 @@ export default function TransactionModal({
                 <select
                   value={formData.stream}
                   onChange={(e) => setFormData({ ...formData, stream: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
                 >
-                  <option value="client">Client Work / Agency</option>
+                  <option value="client">Client Work / Services</option>
                   <option value="app">My Apps / SaaS Product</option>
                   <option value="other">General / Other</option>
                 </select>
@@ -229,7 +229,7 @@ export default function TransactionModal({
                   <select
                     value={formData.clientId}
                     onChange={(e) => handleClientChange(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
                   >
                     <option value="">-- Choose Customer --</option>
                     {clients.map((c) => (
@@ -242,7 +242,7 @@ export default function TransactionModal({
                   <select
                     value={formData.appId}
                     onChange={(e) => handleAppChange(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
                   >
                     <option value="">-- Choose App --</option>
                     {apps.map((a) => (
@@ -257,7 +257,7 @@ export default function TransactionModal({
                     placeholder="e.g. Acme Client or Product"
                     value={formData.sourceName}
                     onChange={(e) => setFormData({ ...formData, sourceName: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
                   />
                 )}
               </div>
@@ -271,7 +271,7 @@ export default function TransactionModal({
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
                 >
                   {expenseCategories.map((cat) => (
                     <option key={cat} value={cat}>
@@ -290,7 +290,7 @@ export default function TransactionModal({
                   placeholder="e.g. AWS, OpenAI API, Figma, Freelancer"
                   value={formData.sourceName}
                   onChange={(e) => setFormData({ ...formData, sourceName: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
             </div>
@@ -306,7 +306,7 @@ export default function TransactionModal({
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
                 >
                   {incomeCategories.map((cat) => (
                     <option key={cat} value={cat}>
@@ -324,10 +324,10 @@ export default function TransactionModal({
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
               >
-                <option value="Paid">Paid / Settled</option>
-                <option value="Pending">Pending / Unpaid Invoice</option>
+                <option value="Paid">Paid / Cash Received</option>
+                <option value="Pending">Pending / Invoiced</option>
               </select>
             </div>
           </div>
@@ -335,44 +335,46 @@ export default function TransactionModal({
           {/* Description */}
           <div>
             <label className="block text-slate-300 font-semibold mb-1">
-              Description / Notes
+              Description / Memo
             </label>
             <input
               type="text"
-              placeholder="e.g. October monthly retainer or AWS invoice"
+              placeholder="e.g. Milestone 1 payment or monthly server cost"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
             />
           </div>
 
           {/* Live Impact Preview */}
           {formData.amount && Number(formData.amount) > 0 && (
-            <div className={`p-3 rounded-xl border text-xs flex items-center justify-between ${
+            <div className={`p-3 rounded-2xl border text-xs flex items-center justify-between ${
               isIncome 
-                ? "bg-emerald-950/20 border-emerald-500/30 text-emerald-300"
-                : "bg-rose-950/20 border-rose-500/30 text-rose-300"
+                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-300"
+                : "bg-rose-500/10 border-rose-500/20 text-rose-300"
             }`}>
-              <span>Accountant Ledger Impact:</span>
-              <strong className="font-bold">
-                {isIncome ? `+${formatCurrency(formData.amount, currency)} to Revenue` : `-${formatCurrency(formData.amount, currency)} to Net Profit`}
+              <span className="font-medium">Ledger Impact:</span>
+              <strong className="font-mono font-bold">
+                {isIncome ? `+${formatCurrency(formData.amount, currency)} to Revenue` : `-${formatCurrency(formData.amount, currency)} to Profit`}
               </strong>
             </div>
           )}
 
           {/* Modal Actions */}
-          <div className="pt-3 border-t border-slate-800 flex justify-end space-x-2">
+          <div className="pt-3 border-t border-white/[0.08] flex justify-end space-x-2 shrink-0">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition"
+              className="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-medium transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className={`px-5 py-2 rounded-xl font-bold text-white transition shadow-md ${
-                isIncome ? "bg-emerald-600 hover:bg-emerald-700" : "bg-rose-600 hover:bg-rose-700"
+              className={`px-5 py-2.5 rounded-xl font-bold text-white transition shadow-lg ${
+                isIncome 
+                  ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-emerald-600/25" 
+                  : "bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 shadow-rose-600/25"
               }`}
             >
               {editItem ? "Save Changes" : isIncome ? "Record Income" : "Record Expense"}

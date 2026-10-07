@@ -6,7 +6,7 @@ export default function AppModal({
   onClose,
   onSave,
   editItem = null,
-  currency = "$",
+  currency = "GH₵",
 }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -56,29 +56,29 @@ export default function AppModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in">
+      <div className="bg-slate-900/95 backdrop-blur-2xl border border-white/[0.1] rounded-3xl w-full max-w-lg shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
         
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-800 bg-slate-950/50">
+        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-white/[0.08] bg-slate-950/40 shrink-0">
           <div>
-            <h2 className="text-base font-bold text-white tracking-tight">
-              {editItem ? "Edit App / Product" : "Add New App / Product"}
+            <h2 className="text-sm sm:text-base font-extrabold text-white tracking-tight">
+              {editItem ? "Edit Product Details" : "Add Digital Product"}
             </h2>
-            <p className="text-xs text-slate-400">
-              Track software users, subscription fees, and dedicated hosting costs
+            <p className="text-xs text-slate-400 mt-0.5">
+              Track active subscribers, recurring plan fees, and domain links
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
+            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-white/[0.05] transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-5 space-y-4 text-xs overflow-y-auto flex-1">
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -91,7 +91,7 @@ export default function AppModal({
                 placeholder="e.g. TaskFlow SaaS"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
@@ -101,10 +101,10 @@ export default function AppModal({
               </label>
               <input
                 type="text"
-                placeholder="e.g. AI Creative Suite, DevTool"
+                placeholder="e.g. AI Creative Suite, Mobile App"
                 value={formData.type}
                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
           </div>
@@ -119,7 +119,7 @@ export default function AppModal({
                 placeholder="e.g. 1500"
                 value={formData.activeUsers}
                 onChange={(e) => setFormData({ ...formData, activeUsers: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
@@ -130,10 +130,10 @@ export default function AppModal({
               <input
                 type="number"
                 step="0.01"
-                placeholder="e.g. 19.00"
+                placeholder="e.g. 150.00"
                 value={formData.monthlyPrice}
                 onChange={(e) => setFormData({ ...formData, monthlyPrice: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
           </div>
@@ -148,7 +148,7 @@ export default function AppModal({
                 placeholder="https://yourapp.com"
                 value={formData.url}
                 onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
@@ -159,7 +159,7 @@ export default function AppModal({
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20"
               >
                 <option value="Active">Active & Monetizing</option>
                 <option value="Beta">Beta Testing</option>
@@ -174,27 +174,27 @@ export default function AppModal({
             </label>
             <textarea
               rows={2}
-              placeholder="e.g. Next.js on Vercel, Supabase backend, Stripe billing..."
+              placeholder="e.g. Next.js, Supabase backend, Stripe/Paystack billing..."
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
+              className="w-full bg-slate-950/70 border border-white/[0.08] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 resize-none"
             />
           </div>
 
           {/* Actions */}
-          <div className="pt-3 border-t border-slate-800 flex justify-end space-x-2">
+          <div className="pt-3 border-t border-white/[0.08] flex justify-end space-x-2 shrink-0">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition"
+              className="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-medium transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-md"
+              className="px-5 py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 transition shadow-lg shadow-indigo-500/25"
             >
-              {editItem ? "Update App" : "Save App"}
+              {editItem ? "Update Product" : "Save Product"}
             </button>
           </div>
 

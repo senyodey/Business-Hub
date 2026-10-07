@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { 
-  Building2, 
-  Coins, 
-  Percent, 
+
   Save, 
   RotateCcw, 
-  Upload, 
   Download, 
-  ShieldCheck, 
   CheckCircle2, 
-  Globe, 
-  Terminal,
-  Server
+  HelpCircle,
+  Users,
+  Plus,
+  Trash2,
+  Briefcase,
+  ShieldCheck
 } from "lucide-react";
 
 export default function SettingsView({
@@ -19,15 +18,22 @@ export default function SettingsView({
   onSaveSettings,
   onResetDemo,
   onOpenBackupModal,
+  onOpenHelpModal = () => {},
+  workspaces = [],
+  activeWorkspaceId = "default",
+  onSwitchWorkspace = () => {},
+  onCreateWorkspace = () => {},
+  onDeleteWorkspace = () => {},
 }) {
   const [formData, setFormData] = useState({
     name: business.name || "",
     tagline: business.tagline || "",
-    currency: business.currency || "$",
-    taxRate: business.taxRate || 25,
+    currency: business.currency || "GH₵",
+    taxRate: business.taxRate !== undefined ? business.taxRate : 25,
   });
 
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [newWsInput, setNewWsInput] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,86 +42,106 @@ export default function SettingsView({
     setTimeout(() => setSavedSuccess(false), 2500);
   };
 
+  const handleCreateWorkspace = (e) => {
+    e.preventDefault();
+    if (newWsInput.trim()) {
+      onCreateWorkspace(newWsInput.trim());
+      setNewWsInput("");
+    }
+  };
+
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="space-y-5 sm:space-y-6 max-w-4xl">
       
       {/* 1. Header */}
-      <div>
-        <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-          Business Settings & Accounting Rules
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-400">
-          Configure currency symbol, tax reserve percentage, and free deployment settings
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            Business Settings & Preferences
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-400">
+            Set your business name, currency (Ghana Cedis), tax reserve rate, and profiles
+          </p>
+        </div>
+
+        <button
+          onClick={() => onOpenHelpModal("glossary")}
+          className="flex items-center space-x-1.5 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 px-3.5 py-2 rounded-xl text-xs font-semibold transition self-start sm:self-auto"
+        >
+          <HelpCircle className="w-4 h-4 text-indigo-400" />
+          <span>User Help Guide</span>
+        </button>
       </div>
 
       {/* 2. Main Settings Form */}
-      <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm space-y-6">
+      <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
         
-        <div className="border-b border-slate-800 pb-4">
+        <div className="border-b border-slate-800 pb-3">
           <h2 className="text-sm font-bold text-white tracking-tight">
             Company Identity
           </h2>
           <p className="text-xs text-slate-400">
-            Used on printable reports and executive dashboards
+            Appears on printable financial statements, invoices, and reports
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div>
             <label className="block text-slate-300 font-semibold mb-1">
-              Business / Studio Name
+              Business / Enterprise Name
             </label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:ring-1 focus:ring-indigo-500 focus:outline-none"
-              placeholder="e.g. Apex Software & Design"
+              placeholder="e.g. Accra Tech Studio"
               required
             />
           </div>
 
           <div>
             <label className="block text-slate-300 font-semibold mb-1">
-              Tagline / Business Nature
+              Tagline / Business Description
             </label>
             <input
               type="text"
               value={formData.tagline}
               onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
               className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:ring-1 focus:ring-indigo-500 focus:outline-none"
-              placeholder="e.g. Digital Apps & Client Web Engineering"
+              placeholder="e.g. Software Products & Client Services"
             />
           </div>
         </div>
 
-        <div className="border-b border-slate-800 pb-4 pt-2">
+        <div className="border-b border-slate-800 pb-3 pt-2">
           <h2 className="text-sm font-bold text-white tracking-tight">
-            Accountant Rules
+            Financial & Tax Rules
           </h2>
           <p className="text-xs text-slate-400">
-            Set your preferred currency symbol and automated tax quarantine percentage
+            Choose your currency symbol and recommended tax savings percentage
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div>
             <label className="block text-slate-300 font-semibold mb-1">
-              Currency Symbol
+              Primary Currency
             </label>
             <select
               value={formData.currency}
               onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:ring-1 focus:ring-indigo-500 focus:outline-none cursor-pointer"
             >
-              <option value="$">$ (USD / CAD / AUD)</option>
-              <option value="€">€ (EUR)</option>
-              <option value="£">£ (GBP)</option>
-              <option value="₦">₦ (NGN)</option>
-              <option value="₹">₹ (INR)</option>
+              <option value="GH₵">GH₵ (Ghana Cedis - GHS)</option>
+              <option value="₵">₵ (Cedis Symbol)</option>
+              <option value="$">$ (USD - US Dollars)</option>
+              <option value="£">£ (GBP - British Pounds)</option>
+              <option value="€">€ (EUR - Euros)</option>
+              <option value="₦">₦ (NGN - Nigerian Naira)</option>
+              <option value="₹">₹ (INR - Indian Rupee)</option>
               <option value="¥">¥ (JPY / CNY)</option>
-              <option value="R$">R$ (BRL)</option>
+              <option value="R$">R$ (BRL - Brazilian Real)</option>
               <option value="CHF">CHF (Swiss Franc)</option>
             </select>
           </div>
@@ -136,15 +162,15 @@ export default function SettingsView({
               <span className="absolute right-3 top-2 text-slate-400 font-bold">%</span>
             </div>
             <span className="text-[11px] text-slate-500 mt-1 block">
-              The accountant advisor will automatically calculate and withhold this % from your net profit.
+              The portal automatically calculates and sets aside this percentage from your net profit for taxes.
             </span>
           </div>
         </div>
 
-        <div className="pt-2 flex items-center justify-between">
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
           <button
             type="submit"
-            className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow-md transition"
+            className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow-md transition"
           >
             <Save className="w-4 h-4" />
             <span>Save Preferences</span>
@@ -153,74 +179,133 @@ export default function SettingsView({
           {savedSuccess && (
             <span className="text-xs text-emerald-400 font-semibold flex items-center space-x-1">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Settings successfully saved!</span>
+              <span>Preferences saved successfully!</span>
             </span>
           )}
         </div>
 
       </form>
 
-      {/* 3. Free Hosting Deployment Guide (Netlify & Vercel) */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
-        <div className="flex items-center space-x-2">
-          <Globe className="w-5 h-5 text-indigo-400" />
-          <h2 className="text-sm font-bold text-white tracking-tight">
-            How to Host 100% Free on Netlify or Vercel
-          </h2>
+      {/* 3. Multi-Workspace Profiles Manager */}
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Users className="w-5 h-5 text-indigo-400" />
+            <div>
+              <h2 className="text-sm font-bold text-white tracking-tight">
+                Workspaces & Business Profiles
+              </h2>
+              <p className="text-xs text-slate-400">
+                Create separate profiles for multiple businesses or different team members
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => onOpenHelpModal("multi-user")}
+            className="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
+          >
+            How it works (?)
+          </button>
         </div>
 
-        <p className="text-xs text-slate-400 leading-relaxed">
-          This portal has zero mandatory external database server fees. All your data persists seamlessly in your browser with full backup/restore and can sync to the included Node.js API whenever running locally.
-        </p>
+        {/* Existing workspaces */}
+        <div className="space-y-2">
+          {workspaces.map((w) => {
+            const isActive = w.id === activeWorkspaceId;
+            return (
+              <div
+                key={w.id}
+                className={`flex items-center justify-between p-3 rounded-xl border text-xs transition ${
+                  isActive
+                    ? "bg-indigo-950/20 border-indigo-500/40 text-white"
+                    : "bg-slate-950 border-slate-800 text-slate-300"
+                }`}
+              >
+                <div className="flex items-center space-x-2.5">
+                  <Briefcase className={`w-4 h-4 ${isActive ? "text-indigo-400" : "text-slate-500"}`} />
+                  <span className="font-semibold">{w.name}</span>
+                  {isActive && (
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-bold">
+                      Active
+                    </span>
+                  )}
+                </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
-            <span className="font-bold text-emerald-400 flex items-center space-x-1.5">
-              <span>Option A: Deploy to Netlify (Free)</span>
-            </span>
-            <p className="text-slate-400 text-[11px]">
-              Included `netlify.toml` automatically configures single-page redirects. Push to GitHub and connect repository to Netlify for automatic zero-cost deployment.
-            </p>
-          </div>
-
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
-            <span className="font-bold text-cyan-400 flex items-center space-x-1.5">
-              <span>Option B: Deploy to Vercel (Free)</span>
-            </span>
-            <p className="text-slate-400 text-[11px]">
-              Included `vercel.json` provides instant zero-config routing. Run `npx vercel` or import from GitHub on Vercel's free hobby tier.
-            </p>
-          </div>
+                <div className="flex items-center space-x-2">
+                  {!isActive && (
+                    <button
+                      onClick={() => onSwitchWorkspace(w.id)}
+                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-medium transition"
+                    >
+                      Switch to this
+                    </button>
+                  )}
+                  {workspaces.length > 1 && (
+                    <button
+                      onClick={() => {
+                        if (window.confirm(`Delete workspace "${w.name}" and all its records?`)) {
+                          onDeleteWorkspace(w.id);
+                        }
+                      }}
+                      className="p-1 text-slate-500 hover:text-rose-400 rounded transition"
+                      title="Delete workspace"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
+
+        {/* Add new workspace */}
+        <form onSubmit={handleCreateWorkspace} className="flex items-center gap-2 pt-1 text-xs">
+          <input
+            type="text"
+            placeholder="New workspace name (e.g. Second Business, Partner Ledger)..."
+            value={newWsInput}
+            onChange={(e) => setNewWsInput(e.target.value)}
+            className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          />
+          <button
+            type="submit"
+            className="flex items-center space-x-1 bg-slate-800 hover:bg-slate-700 text-white font-medium px-4 py-2 rounded-xl border border-slate-700 transition shrink-0"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Profile</span>
+          </button>
+        </form>
       </div>
 
-      {/* 4. Data Management & Backup */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+      {/* 4. Data Safety & Backup (Non-Technical, Clean Business Language) */}
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm space-y-4">
         <div>
-          <h2 className="text-sm font-bold text-white tracking-tight">
-            Data Safety, Backup & Reset
-          </h2>
-          <p className="text-xs text-slate-400">
-            Export JSON files for safe offline backups or restore from a previous save
+          <div className="flex items-center space-x-2 text-white font-bold text-sm mb-1">
+            <ShieldCheck className="w-5 h-5 text-emerald-400" />
+            <span>Data Security & Offline Backup</span>
+          </div>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            All your financial records are saved privately on your device. You can download an offline backup anytime or restore your records if you switch computers.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3 pt-1">
           <button
             onClick={onOpenBackupModal}
-            className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-4 py-2 rounded-xl transition"
+            className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-4 py-2.5 rounded-xl transition"
           >
             <Download className="w-4 h-4 text-indigo-400" />
-            <span>Backup / Restore JSON</span>
+            <span>Backup / Restore Records</span>
           </button>
 
           <button
             onClick={() => {
-              if (window.confirm("Reset all data back to initial demo dataset? Any custom entries will be replaced.")) {
+              if (window.confirm("Reset active workspace back to demo dataset? Any custom entries will be replaced.")) {
                 onResetDemo();
               }
             }}
-            className="flex items-center space-x-2 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/40 text-xs font-semibold px-4 py-2 rounded-xl transition"
+            className="flex items-center space-x-2 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/40 text-xs font-semibold px-4 py-2.5 rounded-xl transition"
           >
             <RotateCcw className="w-4 h-4 text-rose-400" />
             <span>Reset Demo Data</span>

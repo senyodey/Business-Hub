@@ -1,20 +1,95 @@
 import { INITIAL_DATA } from "./initialData";
 
-const STORAGE_KEY = "biz_portal_data_v1";
+const LEGACY_STORAGE_KEY = "biz_portal_data_v1";
+const WORKSPACES_KEY = "biz_portal_workspaces_v2";
+const ACTIVE_WORKSPACE_KEY = "biz_portal_active_ws_v2";
 
 class StorageService {
   constructor() {
     this.apiAvailable = null;
   }
 
-  // Check if Express backend is running
+  // Workspaces / Multi-Profile Management
+  getWorkspaces() {
+    try {
+      const raw = localStorage.getItem(WORKSPACES_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn("Failed to read workspaces:", e);
+    }
+    const defaultWs = [{ id: "default", name: "Primary Business" }];
+    try {
+      localStorage.setItem(WORKSPACES_KEY, JSON.stringify(defaultWs));
+    } catch {}
+    return defaultWs;
+  }
+
+  getActiveWorkspaceId() {
+    try {
+      const active = localStorage.getItem(ACTIVE_WORKSPACE_KEY);
+      const workspaces = this.getWorkspaces();
+      if (active && workspaces.some((w) => w.id === active)) {
+        return active;
+      }
+    } catch {}
+    return "default";
+  }
+
+  setActiveWorkspaceId(id) {
+    try {
+      localStorage.setItem(ACTIVE_WORKSPACE_KEY, id);
+    } catch {}
+  }
+
+  createWorkspace(name) {
+    const workspaces = this.getWorkspaces();
+    const newId = `ws_${Date.now()}`;
+    const newWs = { id: newId, name: name.trim() || `Workspace ${workspaces.length + 1}` };
+    const updated = [...workspaces, newWs];
+    localStorage.setItem(WORKSPACES_KEY, JSON.stringify(updated));
+    // Initialize workspace with template
+    const template = JSON.parse(JSON.stringify(INITIAL_DATA));
+    template.business.name = newWs.name;
+    template.transactions = []; // fresh ledger for new workspace
+    localStorage.setItem(this.getStorageKey(newId), JSON.stringify(template));
+    this.setActiveWorkspaceId(newId);
+    return newWs;
+  }
+
+  deleteWorkspace(id) {
+    let workspaces = this.getWorkspaces();
+    if (workspaces.length <= 1) {
+      throw new Error("Cannot delete the only remaining workspace.");
+    }
+    workspaces = workspaces.filter((w) => w.id !== id);
+    localStorage.setItem(WORKSPACES_KEY, JSON.stringify(workspaces));
+    localStorage.removeItem(this.getStorageKey(id));
+    if (this.getActiveWorkspaceId() === id) {
+      this.setActiveWorkspaceId(workspaces[0].id);
+    }
+    return workspaces;
+  }
+
+  getStorageKey(workspaceId = null) {
+    const wsId = workspaceId || this.getActiveWorkspaceId();
+    return `biz_portal_data_${wsId}`;
+  }
+
+  // Check if Express backend is running (safely checks content-type to avoid Netlify SPA catch-all HTML false positive)
   async checkBackend() {
     if (this.apiAvailable !== null) return this.apiAvailable;
     try {
       const res = await fetch("/api/health", { method: "GET", signal: AbortSignal.timeout(1200) });
-      if (res.ok) {
-        this.apiAvailable = true;
-        return true;
+      const contentType = res.headers.get("content-type") || "";
+      if (res.ok && contentType.includes("application/json")) {
+        const json = await res.json();
+        if (json && json.status === "ok") {
+          this.apiAvailable = true;
+          return true;
+        }
       }
     } catch {
       // Backend not running (e.g. running on Netlify/Vercel static deploy)
@@ -23,17 +98,19 @@ class StorageService {
     return false;
   }
 
-  // Load all portal data
+  // Load all portal data for active workspace
   async loadData() {
     const hasBackend = await this.checkBackend();
+    const storageKey = this.getStorageKey();
 
-    if (hasBackend) {
+    // In local backend mode for primary workspace, sync with Express API
+    if (hasBackend && this.getActiveWorkspaceId() === "default") {
       try {
         const res = await fetch("/api/data");
-        if (res.ok) {
+        const contentType = res.headers.get("content-type") || "";
+        if (res.ok && contentType.includes("application/json")) {
           const remoteData = await res.json();
-          // Backup locally as well
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData));
+          localStorage.setItem(storageKey, JSON.stringify(remoteData));
           return remoteData;
         }
       } catch (err) {
@@ -41,28 +118,40 @@ class StorageService {
       }
     }
 
-    // Local storage fallback (Netlify / Vercel static deployment)
-    const stored = localStorage.getItem(STORAGE_KEY);
+    // Local storage fallback (Netlify / Vercel static deployment or other workspaces)
+    const stored = localStorage.getItem(storageKey);
     if (stored) {
       try {
         return JSON.parse(stored);
       } catch (e) {
-        console.error("Corrupted local storage data, re-initializing:", e);
+        console.error("Corrupted local storage data, checking legacy:", e);
+      }
+    }
+
+    // Check legacy v1 key for backward compatibility
+    if (this.getActiveWorkspaceId() === "default") {
+      const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
+      if (legacy) {
+        try {
+          const parsed = JSON.parse(legacy);
+          localStorage.setItem(storageKey, JSON.stringify(parsed));
+          return parsed;
+        } catch {}
       }
     }
 
     // First time init: save initial seed data
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_DATA));
+    localStorage.setItem(storageKey, JSON.stringify(INITIAL_DATA));
     return JSON.parse(JSON.stringify(INITIAL_DATA));
   }
 
-  // Save all portal data
+  // Save all portal data for active workspace
   async saveData(data) {
-    // Always persist to localStorage for instant client responsiveness
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    const storageKey = this.getStorageKey();
+    localStorage.setItem(storageKey, JSON.stringify(data));
 
     const hasBackend = await this.checkBackend();
-    if (hasBackend) {
+    if (hasBackend && this.getActiveWorkspaceId() === "default") {
       try {
         await fetch("/api/data", {
           method: "POST",
@@ -76,9 +165,10 @@ class StorageService {
     return data;
   }
 
-  // Reset to initial demo data
+  // Reset active workspace to initial demo data
   async resetToDemo() {
-    localStorage.removeItem(STORAGE_KEY);
+    const storageKey = this.getStorageKey();
+    localStorage.removeItem(storageKey);
     return this.saveData(JSON.parse(JSON.stringify(INITIAL_DATA)));
   }
 
@@ -88,7 +178,8 @@ class StorageService {
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
     const dateStr = new Date().toISOString().split("T")[0];
-    downloadAnchor.setAttribute("download", `business-backup-${dateStr}.json`);
+    const wsName = (data.business?.name || "business").toLowerCase().replace(/[^a-z0-9]/g, "-");
+    downloadAnchor.setAttribute("download", `${wsName}-backup-${dateStr}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -108,8 +199,8 @@ class StorageService {
   }
 
   // Export transactions to CSV
-  exportCSV(transactions = []) {
-    const headers = ["ID", "Date", "Type", "Stream", "Category", "Source / Client", "Amount", "Status", "Description"];
+  exportCSV(transactions = [], currency = "$") {
+    const headers = ["ID", "Date", "Type", "Stream", "Category", "Source / Client", `Amount (${currency})`, "Status", "Description"];
     const rows = transactions.map((t) => [
       `"${t.id || ""}"`,
       `"${t.date || ""}"`,

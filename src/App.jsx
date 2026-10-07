@@ -12,6 +12,7 @@ import TransactionModal from "./components/TransactionModal";
 import ClientModal from "./components/ClientModal";
 import AppModal from "./components/AppModal";
 import ExportImportModal from "./components/ExportImportModal";
+import HelpModal from "./components/HelpModal";
 
 import { storage } from "./services/storageService";
 import { calculateFinancials } from "./services/accountantEngine";
@@ -23,6 +24,13 @@ export default function App() {
 
   // Active view navigation
   const [activeView, setActiveView] = useState("dashboard");
+
+  // Mobile menu drawer state
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Workspaces / Multi-Profile state
+  const [workspaces, setWorkspaces] = useState(() => storage.getWorkspaces());
+  const [activeWorkspaceId, setActiveWorkspaceId] = useState(() => storage.getActiveWorkspaceId());
 
   // Time period filter
   const [selectedPeriod, setSelectedPeriod] = useState("ALL");
@@ -40,6 +48,10 @@ export default function App() {
 
   const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
 
+  // Help Modal state
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const [helpInitialTab, setHelpInitialTab] = useState("glossary");
+
   // Initial load
   useEffect(() => {
     async function init() {
@@ -55,7 +67,7 @@ export default function App() {
       }
     }
     init();
-  }, []);
+  }, [activeWorkspaceId]);
 
   // Compute period filters for the accountant engine
   let filterYear = null;
@@ -82,6 +94,38 @@ export default function App() {
   const updateData = async (newData) => {
     setData(newData);
     await storage.saveData(newData);
+  };
+
+  // Workspace handlers
+  const handleSwitchWorkspace = async (id) => {
+    storage.setActiveWorkspaceId(id);
+    setActiveWorkspaceId(id);
+    setLoading(true);
+    const loaded = await storage.loadData();
+    if (loaded) setData(loaded);
+    setLoading(false);
+  };
+
+  const handleCreateWorkspace = (name) => {
+    const created = storage.createWorkspace(name);
+    setWorkspaces(storage.getWorkspaces());
+    setActiveWorkspaceId(created.id);
+  };
+
+  const handleDeleteWorkspace = (id) => {
+    try {
+      const updated = storage.deleteWorkspace(id);
+      setWorkspaces(updated);
+      setActiveWorkspaceId(storage.getActiveWorkspaceId());
+    } catch (e) {
+      alert(e.message);
+    }
+  };
+
+  // Help modal opener
+  const handleOpenHelpModal = (tab = "glossary") => {
+    setHelpInitialTab(tab);
+    setIsHelpModalOpen(true);
   };
 
   // Transaction Handlers
@@ -177,10 +221,6 @@ export default function App() {
     setEditingTx(null);
     setTxInitialType("income");
     setIsTxModalOpen(true);
-    // Pre-populate client in modal
-    setTimeout(() => {
-      // Handled via modal initial form state
-    }, 50);
   };
 
   // App Handlers
@@ -270,20 +310,30 @@ export default function App() {
         setSelectedPeriod={setSelectedPeriod}
         onOpenTransactionModal={() => handleOpenTransactionModal("income")}
         onOpenBackupModal={() => setIsBackupModalOpen(true)}
+        onOpenHelpModal={handleOpenHelpModal}
+        isMobileMenuOpen={isMobileMenuOpen}
+        setIsMobileMenuOpen={setIsMobileMenuOpen}
       />
 
       {/* 2. Main Layout (Sidebar + Content View) */}
-      <div className="flex-1 max-w-7xl w-full mx-auto flex flex-col lg:flex-row">
-        {/* Sidebar */}
+      <div className="flex-1 max-w-7xl w-full mx-auto flex flex-col lg:flex-row min-h-0">
+        {/* Responsive Sidebar (Desktop persistent, Mobile slide-in drawer) */}
         <Sidebar
           activeView={activeView}
           setActiveView={setActiveView}
           counts={counts}
           business={data.business || {}}
+          isMobileMenuOpen={isMobileMenuOpen}
+          setIsMobileMenuOpen={setIsMobileMenuOpen}
+          onOpenHelpModal={handleOpenHelpModal}
+          workspaces={workspaces}
+          activeWorkspaceId={activeWorkspaceId}
+          onSwitchWorkspace={handleSwitchWorkspace}
+          onCreateWorkspace={handleCreateWorkspace}
         />
 
         {/* Dynamic View Area */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <main className="flex-1 p-3.5 sm:p-6 lg:p-8 overflow-y-auto min-w-0">
           {activeView === "dashboard" && (
             <DashboardView
               business={data.business || {}}
@@ -294,6 +344,7 @@ export default function App() {
               onOpenTransactionModal={handleOpenTransactionModal}
               onOpenClientModal={handleOpenClientModal}
               onOpenAppModal={handleOpenAppModal}
+              onOpenHelpModal={handleOpenHelpModal}
               onUpdateTransactionStatus={handleUpdateTransactionStatus}
               setActiveView={setActiveView}
             />
@@ -331,7 +382,7 @@ export default function App() {
               onEditTransaction={handleEditTransaction}
               onDeleteTransaction={handleDeleteTransaction}
               onToggleStatus={handleToggleStatus}
-              onExportCSV={(list) => storage.exportCSV(list)}
+              onExportCSV={(list, curr) => storage.exportCSV(list, curr)}
             />
           )}
 
@@ -349,10 +400,25 @@ export default function App() {
               onSaveSettings={handleSaveSettings}
               onResetDemo={handleResetDemo}
               onOpenBackupModal={() => setIsBackupModalOpen(true)}
+              onOpenHelpModal={handleOpenHelpModal}
+              workspaces={workspaces}
+              activeWorkspaceId={activeWorkspaceId}
+              onSwitchWorkspace={handleSwitchWorkspace}
+              onCreateWorkspace={handleCreateWorkspace}
+              onDeleteWorkspace={handleDeleteWorkspace}
             />
           )}
         </main>
       </div>
+
+      {/* Footer with Copyright */}
+      <footer className="border-t border-white/[0.06] py-5 px-4 text-center text-xs text-slate-400 bg-slate-950/80 backdrop-blur-md">
+        <p className="flex items-center justify-center space-x-1.5 flex-wrap">
+          <span>&copy; {new Date().getFullYear()}</span>
+          <span className="font-bold text-slate-200">Cleeric Senyo Dey</span>
+          <span>• Business Hub & Financial Portal. All rights reserved.</span>
+        </p>
+      </footer>
 
       {/* 3. Global Action Modals */}
       <TransactionModal
@@ -388,7 +454,14 @@ export default function App() {
         data={data}
         onExportJSON={(d) => storage.exportJSON(d)}
         onImportJSON={handleImportJSON}
-        onExportCSV={(txs) => storage.exportCSV(txs)}
+        onExportCSV={(txs, curr) => storage.exportCSV(txs, curr)}
+      />
+
+      {/* 4. Plain-English Help & Guide Modal */}
+      <HelpModal
+        isOpen={isHelpModalOpen}
+        onClose={() => setIsHelpModalOpen(false)}
+        initialTab={helpInitialTab}
       />
     </div>
   );

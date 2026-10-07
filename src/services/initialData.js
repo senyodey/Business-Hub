@@ -2,7 +2,7 @@ export const INITIAL_DATA = {
   business: {
     name: "My Tech Studio",
     tagline: "Apps & Web Development",
-    currency: "$",
+    currency: "GH₵",
     taxRate: 25, // Recommended tax withholding percentage
     fiscalYearStart: 1, // January
   },
