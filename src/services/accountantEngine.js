@@ -4,7 +4,7 @@
  * actionable financial advisory insights.
  */
 
-export function calculateFinancials({ transactions = [], taxRate = 25, filterYear = null, filterMonth = null }) {
+export function calculateFinancials({ transactions = [], taxRate = 25, filterYear = null, filterMonth = null, currency = "GH₵" }) {
   // Filter transactions based on date criteria
   const filtered = transactions.filter((tx) => {
     if (!tx.date) return false;
@@ -138,6 +138,7 @@ export function calculateFinancials({ transactions = [], taxRate = 25, filterYea
     appRevenue,
     expensesByCategory,
     monthlyBreakdown,
+    currency,
   });
 
   return {
@@ -180,6 +181,7 @@ function generateAccountantInsights(data) {
     clientRevenue,
     appRevenue,
     expensesByCategory,
+    currency = "GH₵",
   } = data;
 
   const notes = [];
@@ -191,7 +193,7 @@ function generateAccountantInsights(data) {
       id: "loss-alert",
       type: "alert",
       title: "Deficit Alert: Operating in the Red",
-      message: `Your business has spent $${deficit.toLocaleString()} more than it collected for this period. To reach break-even, you need $${deficit.toLocaleString()} in new billings or to reduce non-critical overhead.`,
+      message: `Your business has spent ${currency} ${deficit.toLocaleString()} more than it collected for this period. To reach break-even, you need ${currency} ${deficit.toLocaleString()} in new billings or to reduce non-critical overhead.`,
       action: "Review top expenses or bill out pending deliverables.",
     });
   } else if (profitMargin >= 35) {
@@ -199,7 +201,7 @@ function generateAccountantInsights(data) {
       id: "healthy-margin",
       type: "success",
       title: "Superb Profit Margin",
-      message: `Your net margin is ${profitMargin.toFixed(1)}%. You are retaining $${netProfit.toLocaleString()} of your $${totalRevenue.toLocaleString()} gross revenue.`,
+      message: `Your net margin is ${profitMargin.toFixed(1)}%. You are retaining ${currency} ${netProfit.toLocaleString()} of your ${currency} ${totalRevenue.toLocaleString()} gross revenue.`,
       action: "Consider reinvesting part of this surplus into app acquisition channels or reserves.",
     });
   }
@@ -210,8 +212,8 @@ function generateAccountantInsights(data) {
       id: "tax-reserve",
       type: "warning",
       title: `Tax Accountant Rule: Set aside ${taxRate}%`,
-      message: `You should quarantine approximately $${taxReserve.toLocaleString()} into a separate business tax account now so you are not hit with an unexpected year-end tax bill.`,
-      action: `Estimated take-home after tax reserve: $${(netProfit - taxReserve).toLocaleString()}`,
+      message: `You should quarantine approximately ${currency} ${taxReserve.toLocaleString()} into a separate business tax account now so you are not hit with an unexpected year-end tax bill.`,
+      action: `Estimated take-home after tax reserve: ${currency} ${(netProfit - taxReserve).toLocaleString()}`,
     });
   }
 
@@ -221,7 +223,7 @@ function generateAccountantInsights(data) {
       id: "pending-revenue",
       type: "info",
       title: "Uncollected Cashflow: Invoices Awaiting Payment",
-      message: `You have $${pendingRevenue.toLocaleString()} in pending invoices awaiting payment. Collecting these would increase your realized cash by ${pendingRevenue.toLocaleString()}.`,
+      message: `You have ${currency} ${pendingRevenue.toLocaleString()} in pending invoices awaiting payment. Collecting these would increase your realized cash by ${currency} ${pendingRevenue.toLocaleString()}.`,
       action: "Send polite follow-ups to clients with unpaid milestone invoices.",
     });
   }
@@ -236,7 +238,7 @@ function generateAccountantInsights(data) {
         id: "recurring-strength",
         type: "success",
         title: "Product Revenue Dominance",
-        message: `Your SaaS & Digital Apps account for ${appPct}% ($${appRevenue.toLocaleString()}) of your revenue. This predictable recurring cashflow insulates you from client drought.`,
+        message: `Your SaaS & Digital Apps account for ${appPct}% (${currency} ${appRevenue.toLocaleString()}) of your revenue. This predictable recurring cashflow insulates you from client drought.`,
         action: "Focus on reducing churn and scaling infrastructure cost-effectively.",
       });
     } else if (clientPct > 60) {
@@ -244,7 +246,7 @@ function generateAccountantInsights(data) {
         id: "client-heavy",
         type: "info",
         title: "Client Services Heavy",
-        message: `Client projects comprise ${clientPct}% ($${clientRevenue.toLocaleString()}) of your income. Client work provides quick capital, but SaaS products provide compounding equity.`,
+        message: `Client projects comprise ${clientPct}% (${currency} ${clientRevenue.toLocaleString()}) of your income. Client work provides quick capital, but SaaS products provide compounding equity.`,
         action: "Allocate a portion of client cashflow toward building and marketing your proprietary apps.",
       });
     }
@@ -260,7 +262,7 @@ function generateAccountantInsights(data) {
         id: "expense-concentration",
         type: "warning",
         title: `Expense Concentration: ${topCat}`,
-        message: `${topCat} makes up ${topCatPct}% ($${topAmount.toLocaleString()}) of all business costs. Ensure this expenditure directly correlates to revenue generation.`,
+        message: `${topCat} makes up ${topCatPct}% (${currency} ${topAmount.toLocaleString()}) of all business costs. Ensure this expenditure directly correlates to revenue generation.`,
         action: `Audit ${topCat} subscriptions or negotiate annual/bulk discounts.`,
       });
     }

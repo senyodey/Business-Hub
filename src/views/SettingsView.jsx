@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { 
-
   Save, 
   RotateCcw, 
   Download, 
@@ -51,7 +50,7 @@ export default function SettingsView({
   };
 
   return (
-    <div className="space-y-5 sm:space-y-6 max-w-4xl">
+    <div className="space-y-6 max-w-4xl">
       
       {/* 1. Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -59,14 +58,14 @@ export default function SettingsView({
           <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
             Business Settings & Preferences
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400">
+          <p className="text-xs sm:text-sm text-slate-400 font-medium mt-0.5">
             Set your business name, currency (Ghana Cedis), tax reserve rate, and profiles
           </p>
         </div>
 
         <button
           onClick={() => onOpenHelpModal("glossary")}
-          className="flex items-center space-x-1.5 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 px-3.5 py-2 rounded-xl text-xs font-semibold transition self-start sm:self-auto"
+          className="flex items-center space-x-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/80 px-3.5 py-2 rounded-xl text-xs font-semibold transition self-start sm:self-auto shadow-sm"
         >
           <HelpCircle className="w-4 h-4 text-indigo-400" />
           <span>User Help Guide</span>
@@ -74,13 +73,13 @@ export default function SettingsView({
       </div>
 
       {/* 2. Main Settings Form */}
-      <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm space-y-5">
+      <form onSubmit={handleSubmit} className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5">
         
         <div className="border-b border-slate-800 pb-3">
           <h2 className="text-sm font-bold text-white tracking-tight">
             Company Identity
           </h2>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-400 font-medium">
             Appears on printable financial statements, invoices, and reports
           </p>
         </div>
@@ -118,7 +117,7 @@ export default function SettingsView({
           <h2 className="text-sm font-bold text-white tracking-tight">
             Financial & Tax Rules
           </h2>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-400 font-medium">
             Choose your currency symbol and recommended tax savings percentage
           </p>
         </div>
@@ -170,7 +169,7 @@ export default function SettingsView({
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
           <button
             type="submit"
-            className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow-md transition"
+            className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow-sm transition active:scale-95"
           >
             <Save className="w-4 h-4" />
             <span>Save Preferences</span>
@@ -187,7 +186,7 @@ export default function SettingsView({
       </form>
 
       {/* 3. Multi-Workspace Profiles Manager */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm space-y-4">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Users className="w-5 h-5 text-indigo-400" />
@@ -195,7 +194,7 @@ export default function SettingsView({
               <h2 className="text-sm font-bold text-white tracking-tight">
                 Workspaces & Business Profiles
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-400 font-medium">
                 Create separate profiles for multiple businesses or different team members
               </p>
             </div>
@@ -217,7 +216,7 @@ export default function SettingsView({
                 key={w.id}
                 className={`flex items-center justify-between p-3 rounded-xl border text-xs transition ${
                   isActive
-                    ? "bg-indigo-950/20 border-indigo-500/40 text-white"
+                    ? "bg-slate-950 border-indigo-500/50 text-white"
                     : "bg-slate-950 border-slate-800 text-slate-300"
                 }`}
               >
@@ -225,7 +224,7 @@ export default function SettingsView({
                   <Briefcase className={`w-4 h-4 ${isActive ? "text-indigo-400" : "text-slate-500"}`} />
                   <span className="font-semibold">{w.name}</span>
                   {isActive && (
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-bold">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 font-bold border border-indigo-500/20">
                       Active
                     </span>
                   )}
@@ -279,7 +278,7 @@ export default function SettingsView({
       </div>
 
       {/* 4. Data Safety & Backup (Non-Technical, Clean Business Language) */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm space-y-4">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
         <div>
           <div className="flex items-center space-x-2 text-white font-bold text-sm mb-1">
             <ShieldCheck className="w-5 h-5 text-emerald-400" />
@@ -293,7 +292,7 @@ export default function SettingsView({
         <div className="flex flex-wrap items-center gap-3 pt-1">
           <button
             onClick={onOpenBackupModal}
-            className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-4 py-2.5 rounded-xl transition"
+            className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold px-4 py-2.5 rounded-xl transition shadow-sm"
           >
             <Download className="w-4 h-4 text-indigo-400" />
             <span>Backup / Restore Records</span>
@@ -305,7 +304,7 @@ export default function SettingsView({
                 onResetDemo();
               }
             }}
-            className="flex items-center space-x-2 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/40 text-xs font-semibold px-4 py-2.5 rounded-xl transition"
+            className="flex items-center space-x-2 bg-rose-950/30 hover:bg-rose-900/40 text-rose-300 border border-rose-800/40 text-xs font-semibold px-4 py-2.5 rounded-xl transition"
           >
             <RotateCcw className="w-4 h-4 text-rose-400" />
             <span>Reset Demo Data</span>

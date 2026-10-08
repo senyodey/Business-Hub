@@ -4,28 +4,28 @@ import {
   Users, 
   AppWindow, 
   Receipt, 
-  FileSpreadsheet, 
+  FileText, 
   Settings, 
-  ShieldCheck,
   HelpCircle,
-  X,
-  Plus,
   Briefcase,
-  ChevronRight
+  Plus,
+  ChevronRight,
+  ShieldCheck,
+  X
 } from "lucide-react";
 
-export default function Sidebar({ 
-  activeView, 
-  setActiveView, 
-  counts = {}, 
-  _business = {},
-  isMobileMenuOpen = false,
-  setIsMobileMenuOpen = () => {},
-  onOpenHelpModal = () => {},
+export default function Sidebar({
+  activeView,
+  setActiveView,
+  counts = {},
+  business = {},
+  isMobileMenuOpen,
+  setIsMobileMenuOpen,
+  onOpenHelpModal,
   workspaces = [],
-  activeWorkspaceId = "default",
-  onSwitchWorkspace = () => {},
-  onCreateWorkspace = () => {},
+  activeWorkspaceId,
+  onSwitchWorkspace,
+  onCreateWorkspace,
 }) {
   const [showNewWsInput, setShowNewWsInput] = useState(false);
   const [newWsName, setNewWsName] = useState("");
@@ -62,7 +62,7 @@ export default function Sidebar({
       id: "reports",
       label: "Financial Statements",
       description: "Annual P&L & Taxes",
-      icon: FileSpreadsheet,
+      icon: FileText,
     },
     {
       id: "settings",
@@ -91,9 +91,9 @@ export default function Sidebar({
       <div className="p-4 space-y-4">
         
         {/* Mobile Header with Close Button */}
-        <div className="flex items-center justify-between lg:hidden pb-3 border-b border-white/[0.08]">
+        <div className="flex items-center justify-between lg:hidden pb-3 border-b border-slate-800">
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-400 text-white flex items-center justify-center font-bold text-xs shadow-md shadow-indigo-500/20">
+            <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
               BH
             </div>
             <span className="font-bold text-white text-sm">Navigation</span>
@@ -107,7 +107,7 @@ export default function Sidebar({
         </div>
 
         {/* Workspace Switcher Card */}
-        <div className="bg-slate-900/60 backdrop-blur-md p-3.5 rounded-2xl border border-white/[0.08] shadow-sm space-y-2.5">
+        <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm space-y-2.5">
           <div className="flex items-center justify-between text-xs">
             <span className="text-slate-400 font-semibold flex items-center space-x-1.5">
               <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
@@ -127,7 +127,7 @@ export default function Sidebar({
             <select
               value={activeWorkspaceId}
               onChange={(e) => onSwitchWorkspace(e.target.value)}
-              className="w-full bg-slate-950/80 border border-white/[0.08] rounded-xl px-2.5 py-1.5 text-xs text-white font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer shadow-inner"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-white font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer shadow-inner"
             >
               {workspaces.map((w) => (
                 <option key={w.id} value={w.id}>
@@ -155,7 +155,7 @@ export default function Sidebar({
                 </button>
                 <button
                   type="submit"
-                  className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold shadow-sm"
+                  className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold shadow-sm"
                 >
                   Create
                 </button>
@@ -180,14 +180,14 @@ export default function Sidebar({
                 onClick={() => handleNavClick(item.id)}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-left transition-all duration-200 group ${
                   isActive
-                    ? "bg-gradient-to-r from-indigo-500/20 via-indigo-500/10 to-transparent text-white font-semibold border-l-2 border-indigo-500 shadow-sm"
-                    : "text-slate-400 hover:text-slate-100 hover:bg-white/[0.04]"
+                    ? "bg-slate-800/90 text-white font-semibold border-l-2 border-indigo-500 shadow-sm"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
                 }`}
               >
                 <div className="flex items-center space-x-3">
                   <div className={`p-1.5 rounded-lg transition ${
                     isActive 
-                      ? "bg-indigo-500/20 text-indigo-300 shadow-sm shadow-indigo-500/20" 
+                      ? "bg-indigo-500/10 text-indigo-400" 
                       : "text-slate-400 group-hover:text-slate-200 group-hover:bg-slate-800/60"
                   }`}>
                     <Icon className="w-4 h-4" />
@@ -207,7 +207,7 @@ export default function Sidebar({
                     className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${
                       isActive
                         ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
-                        : "bg-slate-800/80 text-slate-400"
+                        : "bg-slate-800 text-slate-400"
                     }`}
                   >
                     {item.badge}
@@ -225,10 +225,10 @@ export default function Sidebar({
               setIsMobileMenuOpen(false);
               onOpenHelpModal();
             }}
-            className="w-full flex items-center justify-between px-3.5 py-3 rounded-2xl bg-gradient-to-br from-indigo-950/40 to-slate-900/60 hover:from-indigo-900/40 hover:to-slate-800/80 text-indigo-300 border border-indigo-500/25 transition-all shadow-sm group"
+            className="w-full flex items-center justify-between px-3.5 py-3 rounded-xl bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 hover:border-slate-700 transition shadow-sm group"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shrink-0 shadow-sm shadow-indigo-500/20">
+              <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center shrink-0">
                 <HelpCircle className="w-4 h-4" />
               </div>
               <div className="text-left">
@@ -240,15 +240,15 @@ export default function Sidebar({
                 </div>
               </div>
             </div>
-            <ChevronRight className="w-4 h-4 text-indigo-400/60 group-hover:text-indigo-300 group-hover:translate-x-0.5 transition" />
+            <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-indigo-300 group-hover:translate-x-0.5 transition" />
           </button>
         </div>
 
       </div>
 
       {/* Footer / Protected Trust Badge */}
-      <div className="p-4 border-t border-white/[0.06]">
-        <div className="p-3 rounded-2xl bg-slate-900/40 border border-white/[0.06] backdrop-blur-sm">
+      <div className="p-4 border-t border-slate-800">
+        <div className="p-3 rounded-xl bg-slate-900 border border-slate-800">
           <div className="flex items-center space-x-2 text-emerald-400 text-xs font-semibold">
             <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>Private & Protected</span>
@@ -268,7 +268,7 @@ export default function Sidebar({
   return (
     <>
       {/* 1. Desktop Persistent Sidebar */}
-      <aside className="hidden lg:flex w-64 bg-[#090d19]/80 backdrop-blur-xl border-r border-white/[0.06] flex-col justify-between shrink-0 min-h-[calc(100vh-4rem)]">
+      <aside className="hidden lg:flex w-64 bg-[#0d131f] border-r border-slate-800 flex-col justify-between shrink-0 min-h-[calc(100vh-4rem)]">
         {sidebarContent}
       </aside>
 
@@ -277,12 +277,12 @@ export default function Sidebar({
         <div className="fixed inset-0 z-40 lg:hidden flex">
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/75 backdrop-blur-md transition-opacity"
+            className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
           {/* Slide-out Drawer */}
-          <aside className="relative w-72 max-w-[85vw] bg-[#090d19] border-r border-white/[0.08] h-full z-50 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-left duration-200 shadow-2xl">
+          <aside className="relative w-72 max-w-[85vw] bg-[#0d131f] border-r border-slate-800 h-full z-50 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-left duration-200 shadow-2xl">
             {sidebarContent}
           </aside>
         </div>

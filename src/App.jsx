@@ -88,6 +88,7 @@ export default function App() {
     taxRate: data.business?.taxRate || 25,
     filterYear,
     filterMonth,
+    currency: data.business?.currency || "GH₵",
   });
 
   // Data persistence helper
@@ -301,7 +302,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#0b0f19] text-slate-100 font-sans selection:bg-indigo-500 selection:text-white">
       {/* 1. Header Navigation */}
       <Navbar
         business={data.business || {}}
@@ -412,7 +413,7 @@ export default function App() {
       </div>
 
       {/* Footer with Copyright */}
-      <footer className="border-t border-white/[0.06] py-5 px-4 text-center text-xs text-slate-400 bg-slate-950/80 backdrop-blur-md">
+      <footer className="border-t border-slate-800 py-5 px-4 text-center text-xs text-slate-400 bg-[#0d131f]">
         <p className="flex items-center justify-center space-x-1.5 flex-wrap">
           <span>&copy; {new Date().getFullYear()}</span>
           <span className="font-bold text-slate-200">Cleeric Senyo Dey</span>

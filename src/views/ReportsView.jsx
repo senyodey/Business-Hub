@@ -71,14 +71,14 @@ export default function ReportsView({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 print:hidden">
         <div>
           <div className="flex items-center space-x-2">
-            <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
               Reports & Fiscal Statement
             </h1>
-            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
               Tax Ready
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-400 font-medium mt-0.5">
             Formal profit and loss ledger, annual performance audit, and estimated tax reserves
           </p>
         </div>
@@ -88,7 +88,7 @@ export default function ReportsView({
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(parseInt(e.target.value, 10))}
-              className="bg-slate-900/80 text-slate-200 text-xs font-bold pl-3 pr-8 py-2.5 rounded-2xl border border-white/[0.1] focus:outline-none focus:ring-2 focus:ring-indigo-500/30 cursor-pointer shadow-sm"
+              className="bg-slate-900 text-slate-200 text-xs font-semibold pl-3 pr-8 py-2 rounded-xl border border-slate-700/80 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer shadow-sm"
             >
               <option value={2026}>Fiscal Year 2026</option>
               <option value={2025}>Fiscal Year 2025</option>
@@ -97,7 +97,7 @@ export default function ReportsView({
 
           <button
             onClick={handlePrint}
-            className="inline-flex items-center space-x-1.5 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white text-xs font-bold px-4 py-2.5 rounded-2xl shadow-lg shadow-indigo-500/25 transition-all duration-200 active:scale-[0.98]"
+            className="inline-flex items-center space-x-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-sm transition active:scale-95"
           >
             <Printer className="w-3.5 h-3.5" />
             <span>Print / PDF</span>
@@ -106,13 +106,13 @@ export default function ReportsView({
       </div>
 
       {/* Printable Statement Container */}
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-5 sm:p-7 shadow-xl shadow-black/20 print:bg-white print:text-black print:border-none print:shadow-none space-y-6">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-7 shadow-sm print:bg-white print:text-black print:border-none print:shadow-none space-y-6">
         
         {/* Printable Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-white/[0.08] print:border-gray-300 pb-5 gap-3">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 print:border-gray-300 pb-5 gap-3">
           <div>
             <div className="flex items-center space-x-2">
-              <h2 className="text-lg sm:text-xl font-black text-white print:text-gray-900 tracking-tight">
+              <h2 className="text-lg sm:text-xl font-bold text-white print:text-gray-900 tracking-tight">
                 {business.name || "Business Enterprise"}
               </h2>
               <span className="hidden print:inline text-xs font-semibold px-2 py-0.5 rounded bg-gray-100 text-gray-800 border border-gray-300">
@@ -125,7 +125,7 @@ export default function ReportsView({
           </div>
 
           <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-1">
-            <span className={`px-3 py-1 rounded-full text-xs font-extrabold ${
+            <span className={`px-3 py-1 rounded-full text-xs font-bold ${
               yearTotalNet >= 0 
                 ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 print:bg-emerald-50 print:text-emerald-700" 
                 : "bg-rose-500/10 text-rose-400 border border-rose-500/20 print:bg-rose-50 print:text-rose-700"
@@ -140,46 +140,46 @@ export default function ReportsView({
 
         {/* Annual Executive Highlights */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 print:grid-cols-4">
-          <div className="bg-slate-950/60 print:bg-gray-50 p-3.5 sm:p-4 rounded-2xl border border-white/[0.06] print:border-gray-200">
-            <span className="text-[10px] sm:text-[11px] text-slate-400 print:text-gray-600 uppercase font-bold tracking-wider">
+          <div className="bg-slate-950/60 print:bg-gray-50 p-3.5 sm:p-4 rounded-xl border border-slate-800 print:border-gray-200">
+            <span className="text-[10px] sm:text-[11px] text-slate-400 print:text-gray-600 uppercase font-semibold">
               Total Revenue
             </span>
-            <div className="text-base sm:text-xl font-black font-mono text-white print:text-gray-900 mt-1 truncate">
+            <div className="text-base sm:text-lg font-bold tabular-nums text-white print:text-gray-900 mt-1">
               {formatCurrency(yearTotalRevenue, currency)}
             </div>
-            <span className="text-[10px] text-emerald-400 block mt-0.5">Gross Inflows</span>
+            <span className="text-[10px] text-emerald-400 block mt-0.5 font-medium">Gross Inflows</span>
           </div>
 
-          <div className="bg-slate-950/60 print:bg-gray-50 p-3.5 sm:p-4 rounded-2xl border border-white/[0.06] print:border-gray-200">
-            <span className="text-[10px] sm:text-[11px] text-slate-400 print:text-gray-600 uppercase font-bold tracking-wider">
+          <div className="bg-slate-950/60 print:bg-gray-50 p-3.5 sm:p-4 rounded-xl border border-slate-800 print:border-gray-200">
+            <span className="text-[10px] sm:text-[11px] text-slate-400 print:text-gray-600 uppercase font-semibold">
               Total Expenses
             </span>
-            <div className="text-base sm:text-xl font-black font-mono text-rose-400 print:text-rose-700 mt-1 truncate">
+            <div className="text-base sm:text-lg font-bold tabular-nums text-rose-400 print:text-rose-700 mt-1">
               {formatCurrency(yearTotalExpenses, currency)}
             </div>
-            <span className="text-[10px] text-rose-400/80 block mt-0.5">Operating Overhead</span>
+            <span className="text-[10px] text-rose-400/80 block mt-0.5 font-medium">Operating Overhead</span>
           </div>
 
-          <div className="bg-slate-950/60 print:bg-gray-50 p-3.5 sm:p-4 rounded-2xl border border-white/[0.06] print:border-gray-200">
-            <span className="text-[10px] sm:text-[11px] text-slate-400 print:text-gray-600 uppercase font-bold tracking-wider">
+          <div className="bg-slate-950/60 print:bg-gray-50 p-3.5 sm:p-4 rounded-xl border border-slate-800 print:border-gray-200">
+            <span className="text-[10px] sm:text-[11px] text-slate-400 print:text-gray-600 uppercase font-semibold">
               Net Bottom-Line
             </span>
-            <div className={`text-base sm:text-xl font-black font-mono mt-1 truncate ${
+            <div className={`text-base sm:text-lg font-bold tabular-nums mt-1 ${
               yearTotalNet >= 0 ? "text-emerald-400 print:text-emerald-700" : "text-rose-400 print:text-rose-700"
             }`}>
               {formatCurrency(yearTotalNet, currency)}
             </div>
-            <span className="text-[10px] text-slate-400 block mt-0.5">{formatPercent(yearAvgMargin)} margin</span>
+            <span className="text-[10px] text-slate-400 block mt-0.5 font-medium">{formatPercent(yearAvgMargin)} margin</span>
           </div>
 
-          <div className="bg-slate-950/60 print:bg-gray-50 p-3.5 sm:p-4 rounded-2xl border border-white/[0.06] print:border-gray-200">
-            <span className="text-[10px] sm:text-[11px] text-slate-400 print:text-gray-600 uppercase font-bold tracking-wider">
+          <div className="bg-slate-950/60 print:bg-gray-50 p-3.5 sm:p-4 rounded-xl border border-slate-800 print:border-gray-200">
+            <span className="text-[10px] sm:text-[11px] text-slate-400 print:text-gray-600 uppercase font-semibold">
               Tax Reserve ({business.taxRate || 25}%)
             </span>
-            <div className="text-base sm:text-xl font-black font-mono text-amber-300 print:text-amber-800 mt-1 truncate">
+            <div className="text-base sm:text-lg font-bold tabular-nums text-amber-400 print:text-amber-800 mt-1">
               {formatCurrency(yearTotalTaxReserve, currency)}
             </div>
-            <span className="text-[10px] text-amber-400/80 block mt-0.5">Estimated Set-Aside</span>
+            <span className="text-[10px] text-amber-400/80 block mt-0.5 font-medium">Estimated Set-Aside</span>
           </div>
         </div>
 
@@ -189,70 +189,70 @@ export default function ReportsView({
             <h3 className="text-sm font-bold text-white print:text-gray-900 tracking-tight">
               Monthly Financial Performance Ledger ({selectedYear})
             </h3>
-            <span className="text-[11px] text-slate-400 print:text-gray-500">
+            <span className="text-[11px] text-slate-400 print:text-gray-500 font-medium">
               12 Months Analyzed
             </span>
           </div>
 
-          <div className="overflow-x-auto rounded-2xl border border-white/[0.06] print:border-gray-200">
+          <div className="overflow-x-auto rounded-xl border border-slate-800 print:border-gray-200">
             <table className="w-full min-w-[650px] text-left text-xs">
-              <thead className="bg-slate-950/80 print:bg-gray-100 text-slate-400 print:text-gray-700 uppercase font-bold text-[10px] tracking-wider border-b border-white/[0.06] print:border-gray-200">
+              <thead className="bg-slate-950/80 print:bg-gray-100 text-slate-400 print:text-gray-700 uppercase font-semibold text-[10px] tracking-wider border-b border-slate-800 print:border-gray-200">
                 <tr>
-                  <th className="py-3 px-4">Month</th>
-                  <th className="py-3 px-4 text-right">Gross Revenue</th>
-                  <th className="py-3 px-4 text-right">Operating Costs</th>
-                  <th className="py-3 px-4 text-right">Net Profit / Loss</th>
-                  <th className="py-3 px-4 text-right">Profit Margin</th>
-                  <th className="py-3 px-4 text-right">Tax Reserve</th>
+                  <th className="py-2.5 px-4">Month</th>
+                  <th className="py-2.5 px-4 text-right">Gross Revenue</th>
+                  <th className="py-2.5 px-4 text-right">Operating Costs</th>
+                  <th className="py-2.5 px-4 text-right">Net Profit / Loss</th>
+                  <th className="py-2.5 px-4 text-right">Profit Margin</th>
+                  <th className="py-2.5 px-4 text-right">Tax Reserve</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.04] print:divide-gray-200 text-slate-300 print:text-gray-900">
+              <tbody className="divide-y divide-slate-800/60 print:divide-gray-200 text-slate-300 print:text-gray-900">
                 {monthlyPL.map((row) => (
-                  <tr key={row.month} className="hover:bg-white/[0.02] transition print:hover:bg-transparent">
-                    <td className="py-3 px-4 font-semibold text-white print:text-gray-900">
+                  <tr key={row.month} className="hover:bg-slate-800/20 transition print:hover:bg-transparent">
+                    <td className="py-2.5 px-4 font-semibold text-white print:text-gray-900">
                       {row.month}
                     </td>
-                    <td className="py-3 px-4 text-right font-mono font-semibold text-emerald-400 print:text-emerald-700">
+                    <td className="py-2.5 px-4 text-right tabular-nums font-semibold text-emerald-400 print:text-emerald-700">
                       {formatCurrency(row.revenue, currency)}
                     </td>
-                    <td className="py-3 px-4 text-right font-mono font-semibold text-rose-400 print:text-rose-700">
+                    <td className="py-2.5 px-4 text-right tabular-nums font-semibold text-rose-400 print:text-rose-700">
                       {formatCurrency(row.expenses, currency)}
                     </td>
-                    <td className={`py-3 px-4 text-right font-mono font-bold ${
+                    <td className={`py-2.5 px-4 text-right tabular-nums font-bold ${
                       row.net >= 0 ? "text-emerald-400 print:text-emerald-700" : "text-rose-400 print:text-rose-700"
                     }`}>
                       {formatCurrency(row.net, currency)}
                     </td>
-                    <td className="py-3 px-4 text-right font-semibold">
+                    <td className="py-2.5 px-4 text-right font-medium">
                       {row.revenue > 0 ? (
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] ${row.net >= 0 ? "bg-emerald-500/10 text-emerald-400" : "bg-rose-500/10 text-rose-400"}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${row.net >= 0 ? "bg-emerald-500/10 text-emerald-400" : "bg-rose-500/10 text-rose-400"}`}>
                           {formatPercent(row.margin)}
                         </span>
                       ) : "—"}
                     </td>
-                    <td className="py-3 px-4 text-right font-mono text-amber-300 print:text-amber-800">
+                    <td className="py-2.5 px-4 text-right tabular-nums text-amber-400 print:text-amber-800">
                       {row.taxReserve > 0 ? formatCurrency(row.taxReserve, currency) : "—"}
                     </td>
                   </tr>
                 ))}
                 {/* Total Row */}
-                <tr className="bg-slate-950/90 font-bold border-t-2 border-white/[0.1] print:bg-gray-100 text-white print:text-gray-900">
-                  <td className="py-3.5 px-4 uppercase text-xs tracking-wider">Full Year Total</td>
-                  <td className="py-3.5 px-4 text-right font-mono text-emerald-400 print:text-emerald-700 text-sm">
+                <tr className="bg-slate-950/90 font-bold border-t-2 border-slate-700 print:bg-gray-100 text-white print:text-gray-900">
+                  <td className="py-3 px-4 uppercase text-xs tracking-wider">Full Year Total</td>
+                  <td className="py-3 px-4 text-right tabular-nums text-emerald-400 print:text-emerald-700">
                     {formatCurrency(yearTotalRevenue, currency)}
                   </td>
-                  <td className="py-3.5 px-4 text-right font-mono text-rose-400 print:text-rose-700 text-sm">
+                  <td className="py-3 px-4 text-right tabular-nums text-rose-400 print:text-rose-700">
                     {formatCurrency(yearTotalExpenses, currency)}
                   </td>
-                  <td className={`py-3.5 px-4 text-right font-mono text-sm ${yearTotalNet >= 0 ? "text-emerald-400 print:text-emerald-700" : "text-rose-400 print:text-rose-700"}`}>
+                  <td className={`py-3 px-4 text-right tabular-nums ${yearTotalNet >= 0 ? "text-emerald-400 print:text-emerald-700" : "text-rose-400 print:text-rose-700"}`}>
                     {formatCurrency(yearTotalNet, currency)}
                   </td>
-                  <td className="py-3.5 px-4 text-right">
-                    <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-xs">
+                  <td className="py-3 px-4 text-right">
+                    <span className="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 text-xs font-semibold">
                       {formatPercent(yearAvgMargin)}
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 text-right font-mono text-amber-300 print:text-amber-800 text-sm">
+                  <td className="py-3 px-4 text-right tabular-nums text-amber-400 print:text-amber-800">
                     {formatCurrency(yearTotalTaxReserve, currency)}
                   </td>
                 </tr>
@@ -264,12 +264,12 @@ export default function ReportsView({
       </div>
 
       {/* 2. Multi-Year Historical Performance Standing */}
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-5 sm:p-7 shadow-xl shadow-black/20 print:hidden space-y-4">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm print:hidden space-y-4">
         <div>
           <h3 className="text-sm font-bold text-white tracking-tight">
             Multi-Year Historical Business Standing
           </h3>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-400 font-medium mt-0.5">
             Compare fiscal health year-over-year as your software assets and client base expand
           </p>
         </div>
@@ -278,11 +278,11 @@ export default function ReportsView({
           {yearlyStanding.map((y) => (
             <div
               key={y.year}
-              className="bg-slate-950/60 border border-white/[0.06] rounded-2xl p-4 sm:p-5 space-y-3 hover:border-white/[0.12] transition"
+              className="bg-slate-950/60 border border-slate-800 rounded-xl p-4 sm:p-5 space-y-3 hover:border-slate-700 transition"
             >
               <div className="flex items-center justify-between">
-                <span className="text-base font-extrabold text-white">Year {y.year}</span>
-                <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
+                <span className="text-base font-bold text-white">Year {y.year}</span>
+                <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
                   y.isProfitable 
                     ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                     : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
@@ -292,35 +292,35 @@ export default function ReportsView({
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-slate-900/50 p-2.5 rounded-xl border border-white/[0.04]">
+                <div className="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">
                   <span className="text-slate-400 block text-[10px] uppercase font-semibold">Total Revenue</span>
-                  <span className="font-mono font-bold text-emerald-400 text-sm block mt-0.5">
+                  <span className="font-bold text-emerald-400 text-sm tabular-nums block mt-0.5">
                     {formatCurrency(y.revenue, currency)}
                   </span>
                 </div>
-                <div className="bg-slate-900/50 p-2.5 rounded-xl border border-white/[0.04]">
+                <div className="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">
                   <span className="text-slate-400 block text-[10px] uppercase font-semibold">Total Expenses</span>
-                  <span className="font-mono font-bold text-rose-400 text-sm block mt-0.5">
+                  <span className="font-bold text-rose-400 text-sm tabular-nums block mt-0.5">
                     {formatCurrency(y.expenses, currency)}
                   </span>
                 </div>
-                <div className="bg-slate-900/50 p-2.5 rounded-xl border border-white/[0.04]">
+                <div className="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">
                   <span className="text-slate-400 block text-[10px] uppercase font-semibold">SaaS Products</span>
-                  <span className="font-mono font-bold text-indigo-300 text-sm block mt-0.5">
+                  <span className="font-bold text-indigo-400 text-sm tabular-nums block mt-0.5">
                     {formatCurrency(y.appRevenue, currency)}
                   </span>
                 </div>
-                <div className="bg-slate-900/50 p-2.5 rounded-xl border border-white/[0.04]">
+                <div className="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">
                   <span className="text-slate-400 block text-[10px] uppercase font-semibold">Client Contracts</span>
-                  <span className="font-mono font-bold text-cyan-300 text-sm block mt-0.5">
+                  <span className="font-bold text-cyan-400 text-sm tabular-nums block mt-0.5">
                     {formatCurrency(y.clientRevenue, currency)}
                   </span>
                 </div>
               </div>
 
-              <div className="pt-2.5 border-t border-white/[0.06] flex justify-between items-center text-xs">
+              <div className="pt-2.5 border-t border-slate-800 flex justify-between items-center text-xs">
                 <span className="text-slate-400 font-medium">Net Return:</span>
-                <span className={`font-mono font-black text-sm ${y.isProfitable ? "text-emerald-400" : "text-rose-400"}`}>
+                <span className={`font-bold tabular-nums text-sm ${y.isProfitable ? "text-emerald-400" : "text-rose-400"}`}>
                   {formatCurrency(y.net, currency)}
                 </span>
               </div>

@@ -51,21 +51,21 @@ export default function ChartsSection({ financials = {}, currency = "GH₵" }) {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
       
       {/* 1. Monthly Revenue vs Expenses Bar Chart */}
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-5 shadow-lg shadow-black/20 min-w-0 flex flex-col justify-between">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-sm min-w-0 flex flex-col justify-between">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <div>
-            <h3 className="text-sm font-extrabold text-white tracking-tight">
+            <h3 className="text-sm font-bold text-white tracking-tight">
               Cashflow: Inflow vs Outflow
             </h3>
             <p className="text-xs text-slate-400 font-medium">Monthly Revenue vs Operating Costs</p>
           </div>
           <div className="flex items-center space-x-3 text-xs font-semibold">
             <div className="flex items-center space-x-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block shadow-sm shadow-emerald-400/50"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span>
               <span className="text-slate-300">Revenue</span>
             </div>
             <div className="flex items-center space-x-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block shadow-sm shadow-rose-400/50"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block"></span>
               <span className="text-slate-300">Expenses</span>
             </div>
           </div>
@@ -95,9 +95,9 @@ export default function ChartsSection({ financials = {}, currency = "GH₵" }) {
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#0b101d",
-                    borderColor: "rgba(255,255,255,0.1)",
-                    borderRadius: "1rem",
+                    backgroundColor: "#0d131f",
+                    borderColor: "#334155",
+                    borderRadius: "0.75rem",
                     boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
                     color: "#f8fafc",
                     fontSize: "12px",
@@ -105,8 +105,8 @@ export default function ChartsSection({ financials = {}, currency = "GH₵" }) {
                   }}
                   formatter={(val) => [formatCurrency(val, currency)]}
                 />
-                <Bar dataKey="revenue" fill="url(#barRevGrad)" radius={[6, 6, 0, 0]} name="Revenue" />
-                <Bar dataKey="expenses" fill="url(#barExpGrad)" radius={[6, 6, 0, 0]} name="Expenses" />
+                <Bar dataKey="revenue" fill="url(#barRevGrad)" radius={[4, 4, 0, 0]} name="Revenue" />
+                <Bar dataKey="expenses" fill="url(#barExpGrad)" radius={[4, 4, 0, 0]} name="Expenses" />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -118,10 +118,10 @@ export default function ChartsSection({ financials = {}, currency = "GH₵" }) {
       </div>
 
       {/* 2. Net Profit Trajectory Area Chart */}
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-5 shadow-lg shadow-black/20 min-w-0 flex flex-col justify-between">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-sm min-w-0 flex flex-col justify-between">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-extrabold text-white tracking-tight">
+            <h3 className="text-sm font-bold text-white tracking-tight">
               Net Profit Trajectory Over Time
             </h3>
             <p className="text-xs text-slate-400 font-medium">Monthly bottom-line growth (take-home base)</p>
@@ -134,7 +134,7 @@ export default function ChartsSection({ financials = {}, currency = "GH₵" }) {
               <AreaChart data={monthlyData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
                 <defs>
                   <linearGradient id="profitGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.45} />
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.35} />
                     <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
@@ -148,9 +148,9 @@ export default function ChartsSection({ financials = {}, currency = "GH₵" }) {
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#0b101d",
-                    borderColor: "rgba(255,255,255,0.1)",
-                    borderRadius: "1rem",
+                    backgroundColor: "#0d131f",
+                    borderColor: "#334155",
+                    borderRadius: "0.75rem",
                     boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
                     color: "#f8fafc",
                     fontSize: "12px",
@@ -162,7 +162,7 @@ export default function ChartsSection({ financials = {}, currency = "GH₵" }) {
                   type="monotone"
                   dataKey="net"
                   stroke="#818cf8"
-                  strokeWidth={3}
+                  strokeWidth={2.5}
                   fillOpacity={1}
                   fill="url(#profitGrad)"
                 />
@@ -177,9 +177,9 @@ export default function ChartsSection({ financials = {}, currency = "GH₵" }) {
       </div>
 
       {/* 3. Revenue Stream Breakdown Donut */}
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-5 shadow-lg shadow-black/20 min-w-0 flex flex-col justify-between">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-sm min-w-0 flex flex-col justify-between">
         <div className="mb-4">
-          <h3 className="text-sm font-extrabold text-white tracking-tight">
+          <h3 className="text-sm font-bold text-white tracking-tight">
             Revenue by Stream
           </h3>
           <p className="text-xs text-slate-400 font-medium">Software Products vs Client Development Services</p>
@@ -204,9 +204,9 @@ export default function ChartsSection({ financials = {}, currency = "GH₵" }) {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#0b101d",
-                    borderColor: "rgba(255,255,255,0.1)",
-                    borderRadius: "1rem",
+                    backgroundColor: "#0d131f",
+                    borderColor: "#334155",
+                    borderRadius: "0.75rem",
                     fontSize: "12px",
                     fontWeight: 600,
                   }}
@@ -226,9 +226,9 @@ export default function ChartsSection({ financials = {}, currency = "GH₵" }) {
       </div>
 
       {/* 4. Expense Categories Breakdown */}
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-5 shadow-lg shadow-black/20 min-w-0 flex flex-col justify-between">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-sm min-w-0 flex flex-col justify-between">
         <div className="mb-4">
-          <h3 className="text-sm font-extrabold text-white tracking-tight">
+          <h3 className="text-sm font-bold text-white tracking-tight">
             Where Did Your Money Go?
           </h3>
           <p className="text-xs text-slate-400 font-medium">Expense breakdown across operational categories</p>
@@ -250,9 +250,9 @@ export default function ChartsSection({ financials = {}, currency = "GH₵" }) {
                       {formatCurrency(item.value, currency)} ({pct}%)
                     </span>
                   </div>
-                  <div className="w-full bg-slate-950/70 rounded-full h-2.5 overflow-hidden p-0.5 border border-white/[0.05]">
+                  <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
                     <div
-                      className="h-full rounded-full transition-all duration-500 shadow-sm"
+                      className="h-full rounded-full transition-all duration-500"
                       style={{ width: `${pct}%`, backgroundColor: color }}
                     />
                   </div>

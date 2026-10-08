@@ -51,23 +51,23 @@ export default function TransactionsView({
   const filteredNet = totalFilteredIncome - totalFilteredExpenses;
 
   return (
-    <div className="space-y-6 sm:space-y-7">
+    <div className="space-y-6">
       
       {/* 1. Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
             Financial Ledger & Transactions
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 font-medium">
+          <p className="text-xs sm:text-sm text-slate-400 font-medium mt-0.5">
             Every transaction in and out, with instant autocomputed net profit impact
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => onExportCSV(filtered, currency)}
-            className="flex items-center space-x-1.5 bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-white/[0.08] px-3.5 py-2.5 rounded-2xl text-xs font-bold transition shadow-sm"
+            className="flex items-center space-x-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/80 px-3.5 py-2 rounded-xl text-xs font-semibold transition shadow-sm"
           >
             <Download className="w-4 h-4 text-indigo-400" />
             <span>Export CSV</span>
@@ -75,7 +75,7 @@ export default function TransactionsView({
 
           <button
             onClick={() => onOpenTransactionModal("income")}
-            className="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 sm:px-4 py-2.5 rounded-2xl text-xs font-bold shadow-md shadow-emerald-600/25 transition active:scale-95"
+            className="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition active:scale-95"
           >
             <ArrowUpRight className="w-4 h-4" />
             <span>+ Income</span>
@@ -83,7 +83,7 @@ export default function TransactionsView({
 
           <button
             onClick={() => onOpenTransactionModal("expense")}
-            className="flex items-center space-x-1.5 bg-rose-600 hover:bg-rose-700 text-white px-3.5 sm:px-4 py-2.5 rounded-2xl text-xs font-bold shadow-md shadow-rose-600/25 transition active:scale-95"
+            className="flex items-center space-x-1.5 bg-rose-600 hover:bg-rose-500 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition active:scale-95"
           >
             <ArrowDownRight className="w-4 h-4" />
             <span>+ Expense</span>
@@ -93,28 +93,28 @@ export default function TransactionsView({
 
       {/* 2. Filtered Summary Strip */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-slate-900/60 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-4.5 shadow-md">
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-sm">
           <span className="text-slate-400 text-xs font-medium block mb-1">Filtered Inflow</span>
-          <span className="text-xl font-extrabold text-emerald-400 tracking-tight">
+          <span className="text-xl font-bold text-emerald-400 tracking-tight tabular-nums block">
             +{formatCurrency(totalFilteredIncome, currency)}
           </span>
         </div>
-        <div className="bg-slate-900/60 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-4.5 shadow-md">
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-sm">
           <span className="text-slate-400 text-xs font-medium block mb-1">Filtered Outflow</span>
-          <span className="text-xl font-extrabold text-rose-400 tracking-tight">
+          <span className="text-xl font-bold text-rose-400 tracking-tight tabular-nums block">
             -{formatCurrency(totalFilteredExpenses, currency)}
           </span>
         </div>
-        <div className="bg-slate-900/60 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-4.5 shadow-md">
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-sm">
           <span className="text-slate-400 text-xs font-medium block mb-1">Filtered Net Standing</span>
-          <span className={`text-xl font-extrabold tracking-tight ${filteredNet >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+          <span className={`text-xl font-bold tracking-tight tabular-nums block ${filteredNet >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
             {formatCurrency(filteredNet, currency)}
           </span>
         </div>
       </div>
 
       {/* 3. Search and Multi-filter Bar */}
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-4 sm:p-5 space-y-3.5 shadow-md">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3.5 shadow-sm">
         <div className="relative">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
           <input
@@ -122,14 +122,14 @@ export default function TransactionsView({
             placeholder="Search description, customer name, software product, or category..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-slate-950/80 border border-white/[0.08] rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-inner"
+            className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 shadow-inner"
           />
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5 overflow-x-auto pb-1 sm:pb-0">
             {/* Type Filter */}
-            <div className="flex items-center space-x-1 bg-slate-950/70 p-1 rounded-xl border border-white/[0.06] shrink-0">
+            <div className="flex items-center space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800 shrink-0">
               <span className="text-slate-400 text-[11px] px-1 font-semibold">Type:</span>
               {["ALL", "income", "expense"].map((t) => (
                 <button
@@ -147,7 +147,7 @@ export default function TransactionsView({
             </div>
 
             {/* Stream Filter */}
-            <div className="flex items-center space-x-1 bg-slate-950/70 p-1 rounded-xl border border-white/[0.06] shrink-0">
+            <div className="flex items-center space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800 shrink-0">
               <span className="text-slate-400 text-[11px] px-1 font-semibold">Stream:</span>
               {["ALL", "client", "app"].map((s) => (
                 <button
@@ -165,7 +165,7 @@ export default function TransactionsView({
             </div>
 
             {/* Status Filter */}
-            <div className="flex items-center space-x-1 bg-slate-950/70 p-1 rounded-xl border border-white/[0.06] shrink-0">
+            <div className="flex items-center space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800 shrink-0">
               <span className="text-slate-400 text-[11px] px-1 font-semibold">Status:</span>
               {["ALL", "Paid", "Pending"].map((st) => (
                 <button
@@ -190,56 +190,56 @@ export default function TransactionsView({
       </div>
 
       {/* 4. Ledger Table */}
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/[0.08] rounded-3xl overflow-hidden shadow-lg shadow-black/20">
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-left text-xs">
-            <thead className="bg-slate-950/80 text-slate-400 font-bold uppercase tracking-wider border-b border-white/[0.06]">
+            <thead className="bg-slate-950/80 text-slate-400 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-800">
               <tr>
-                <th className="py-3.5 px-4">Date</th>
-                <th className="py-3.5 px-4">Type</th>
-                <th className="py-3.5 px-4">Source / Party</th>
-                <th className="py-3.5 px-4">Category</th>
-                <th className="py-3.5 px-4">Description</th>
-                <th className="py-3.5 px-4">Status</th>
-                <th className="py-3.5 px-4 text-right">Amount</th>
-                <th className="py-3.5 px-4 text-center">Actions</th>
+                <th className="py-3 px-4">Date</th>
+                <th className="py-3 px-4">Type</th>
+                <th className="py-3 px-4">Source / Party</th>
+                <th className="py-3 px-4">Category</th>
+                <th className="py-3 px-4">Description</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4 text-right">Amount</th>
+                <th className="py-3 px-4 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.04] text-slate-300">
+            <tbody className="divide-y divide-slate-800/60 text-slate-300">
               {filtered.map((tx) => {
                 const isInc = tx.type === "income";
                 const isPaid = tx.status === "Paid";
 
                 return (
-                  <tr key={tx.id} className="hover:bg-white/[0.03] transition-colors">
+                  <tr key={tx.id} className="hover:bg-slate-800/30 transition-colors">
                     <td className="py-3.5 px-4 text-slate-400 whitespace-nowrap font-medium">
                       {formatDate(tx.date)}
                     </td>
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] ${
-                        isInc
-                          ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
-                          : "bg-rose-500/15 text-rose-400 border border-rose-500/25"
+                        isInc 
+                          ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" 
+                          : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
                       }`}>
                         {isInc ? "Income" : "Expense"}
                       </span>
                     </td>
                     <td className="py-3.5 px-4 font-bold text-white whitespace-nowrap">
-                      {tx.sourceName || (tx.stream === "app" ? "App Asset" : "General")}
+                      {tx.sourceName || "General"}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-300 whitespace-nowrap font-medium">
+                    <td className="py-3.5 px-4 text-slate-400 whitespace-nowrap font-medium">
                       {tx.category || "General"}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-400 max-w-xs truncate font-normal" title={tx.description}>
+                    <td className="py-3.5 px-4 text-slate-400 max-w-[200px] truncate" title={tx.description}>
                       {tx.description || "—"}
                     </td>
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <button
                         onClick={() => onToggleStatus(tx.id)}
-                        className={`inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer hover:opacity-80 ${
+                        className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border transition ${
                           isPaid
-                            ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20"
-                            : "bg-amber-500/15 text-amber-300 border border-amber-500/20"
+                            ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:bg-emerald-500/20"
+                            : "bg-amber-500/10 text-amber-300 border-amber-500/20 hover:bg-amber-500/20"
                         }`}
                         title="Click to toggle status"
                       >
@@ -247,24 +247,24 @@ export default function TransactionsView({
                         <span>{tx.status}</span>
                       </button>
                     </td>
-                    <td className={`py-3.5 px-4 text-right font-extrabold whitespace-nowrap ${
+                    <td className={`py-3.5 px-4 text-right font-bold tabular-nums whitespace-nowrap ${
                       isInc ? "text-emerald-400" : "text-rose-400"
                     }`}>
                       {isInc ? "+" : "-"}{formatCurrency(tx.amount, currency)}
                     </td>
                     <td className="py-3.5 px-4 text-center whitespace-nowrap">
-                      <div className="flex items-center justify-center space-x-1.5">
+                      <div className="flex items-center justify-center space-x-1">
                         <button
                           onClick={() => onEditTransaction(tx)}
-                          className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition"
-                          title="Edit"
+                          className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition"
+                          title="Edit transaction"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => onDeleteTransaction(tx.id)}
-                          className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-xl transition"
-                          title="Delete"
+                          className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition"
+                          title="Delete transaction"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -273,15 +273,16 @@ export default function TransactionsView({
                   </tr>
                 );
               })}
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan="8" className="py-12 text-center text-slate-400">
+                    No transactions match your current filters.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
-
-        {filtered.length === 0 && (
-          <div className="text-center py-12 text-slate-400 text-xs font-medium">
-            No transactions found matching your filters.
-          </div>
-        )}
       </div>
 
     </div>
