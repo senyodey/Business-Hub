@@ -13,6 +13,7 @@ import ClientModal from "./components/ClientModal";
 import AppModal from "./components/AppModal";
 import ExportImportModal from "./components/ExportImportModal";
 import HelpModal from "./components/HelpModal";
+import InvoiceModal from "./components/InvoiceModal";
 
 import { storage } from "./services/storageService";
 import { calculateFinancials } from "./services/accountantEngine";
@@ -47,6 +48,8 @@ export default function App() {
   const [editingApp, setEditingApp] = useState(null);
 
   const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
+
+  const [invoiceClient, setInvoiceClient] = useState(null);
 
   // Help Modal state
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
@@ -224,6 +227,12 @@ export default function App() {
     setIsTxModalOpen(true);
   };
 
+  // Invoice Handlers
+  const handleRecordInvoice = async (invoiceTx) => {
+    const newTx = { ...invoiceTx, id: `tx-${Date.now()}` };
+    await updateData({ ...data, transactions: [newTx, ...(data.transactions || [])] });
+  };
+
   // App Handlers
   const handleOpenAppModal = () => {
     setEditingApp(null);
@@ -360,6 +369,7 @@ export default function App() {
               onEditClient={handleEditClient}
               onDeleteClient={handleDeleteClient}
               onAddTransactionForClient={handleAddTransactionForClient}
+              onGenerateInvoice={setInvoiceClient}
             />
           )}
 
@@ -447,6 +457,14 @@ export default function App() {
         onSave={handleSaveApp}
         editItem={editingApp}
         currency={data.business?.currency || "$"}
+      />
+
+      <InvoiceModal
+        isOpen={!!invoiceClient}
+        onClose={() => setInvoiceClient(null)}
+        onRecordToLedger={handleRecordInvoice}
+        client={invoiceClient}
+        business={data.business || {}}
       />
 
       <ExportImportModal

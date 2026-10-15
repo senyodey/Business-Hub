@@ -6,8 +6,9 @@ import {
   Phone, 
   Edit3, 
   Trash2, 
-  DollarSign, 
-  Briefcase
+  DollarSign,
+  Briefcase,
+  FileText
 } from "lucide-react";
 import { formatCurrency } from "../utils/formatters";
 
@@ -19,6 +20,7 @@ export default function ClientsView({
   onEditClient,
   onDeleteClient,
   onAddTransactionForClient,
+  onGenerateInvoice,
 }) {
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("ALL");
@@ -239,15 +241,24 @@ export default function ClientsView({
                   </div>
                 )}
 
-                {/* Actions: Add Income, Edit, Delete */}
+                {/* Actions: Add Income, Generate Invoice, Edit, Delete */}
                 <div className="flex items-center justify-between pt-1 gap-2">
-                  <button
-                    onClick={() => onAddTransactionForClient(client)}
-                    className="flex items-center space-x-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded-xl border border-emerald-500/20 transition shadow-sm"
-                  >
-                    <DollarSign className="w-3.5 h-3.5" />
-                    <span>Record Payment</span>
-                  </button>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <button
+                      onClick={() => onAddTransactionForClient(client)}
+                      className="flex items-center space-x-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded-xl border border-emerald-500/20 transition shadow-sm"
+                    >
+                      <DollarSign className="w-3.5 h-3.5" />
+                      <span>Record Payment</span>
+                    </button>
+                    <button
+                      onClick={() => onGenerateInvoice(client)}
+                      className="flex items-center space-x-1.5 text-xs font-semibold text-indigo-400 hover:text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 px-3 py-1.5 rounded-xl border border-indigo-500/20 transition shadow-sm"
+                    >
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>Generate Invoice</span>
+                    </button>
+                  </div>
 
                   <div className="flex items-center space-x-1 shrink-0">
                     <button
